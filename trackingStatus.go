@@ -11,6 +11,7 @@ type TrackingStatus struct {
 	Status        string    `json:"status"`
 	StatusDetails string    `json:"status_details"`
 	StatusDate    time.Time `json:"status_date"`
+	Location      Address   `json:"location"`
 }
 
 type MaybeTrackingStatus struct {
