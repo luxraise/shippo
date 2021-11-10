@@ -27,6 +27,7 @@ const (
 
 	endpointTransactions    = "/transactions/"
 	endpointCarrierAccounts = "/carrier_accounts/"
+	endpointTracks          = "/tracks/%s/%s"
 )
 
 // New initializes and returns a new Stripe Client
@@ -72,6 +73,13 @@ func (c *Client) GetCarrierAccounts(carriers ...string) (accounts []CarrierAccou
 func (c *Client) CreateLabel(request CreateLabelRequest) (created CreateLabelResponse, err error) {
 	url := c.getURL(endpointTransactions, nil)
 	err = c.request("POST", url, &request, &created)
+	return
+}
+
+func (c *Client) GetTracking(carrier, trackingNumber string) (resp TrackingResponse, err error) {
+	endpoint := fmt.Sprintf(endpointTracks, carrier, trackingNumber)
+	url := c.getURL(endpoint, nil)
+	err = c.request("GET", url, nil, &resp)
 	return
 }
 
