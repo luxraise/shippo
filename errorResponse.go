@@ -1,11 +1,12 @@
 package shippo
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 )
 
-type errorResponse map[string][]string
+type errorResponse map[string]errorsList
 
 func (e errorResponse) Error() string {
 	var errors []string
@@ -24,4 +25,22 @@ func (e errorResponse) Error() string {
 	default:
 		return strings.Join(errors, "\n")
 	}
+}
+
+type errorsList []string
+
+func (e *errorsList) UnmarshalJSON(bs []byte) (err error) {
+	var ss []string
+	if err = json.Unmarshal(bs, &ss); err == nil {
+		*e = ss
+		return
+	}
+
+	var str string
+	if err = json.Unmarshal(bs, &str); err != nil {
+		return
+	}
+
+	*e = errorsList{str}
+	return
 }

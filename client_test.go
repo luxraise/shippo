@@ -11,6 +11,7 @@ var (
 	testAPIKey           = os.Getenv("SHIPPO_TEST_API_KEY")
 	testClient           *Client
 	testCarrierAccountID string
+	testTrackingNumber   = os.Getenv("SHIPPO_TEST_TRACKING_NUMBER")
 )
 
 func TestClient_New(t *testing.T) {
@@ -108,6 +109,27 @@ func TestClient_CreateLabel(t *testing.T) {
 
 	if _, err = c.CreateLabel(label); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestClient_GetTracking(t *testing.T) {
+	var (
+		c   *Client
+		err error
+	)
+
+	if c, err = New(testAPIKey); err != nil {
+		t.Fatal(err)
+	}
+
+	var resp TrackingResponse
+	if resp, err = c.GetTracking("shippo", testTrackingNumber); err != nil {
+		t.Fatal(err)
+	}
+
+	var empty TrackingStatus
+	if resp.TrackingStatus == empty {
+		t.Fatal("invalid tracking status, expected a non-empty value")
 	}
 }
 

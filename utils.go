@@ -47,3 +47,9 @@ func handleError(r io.Reader) (err error) {
 func isUnknown(bs []byte) bool {
 	return bytes.Equal(unknownBytes, bs)
 }
+
+// NameToken represents a name/token pair
+type NameToken struct {
+	Name  string `json:"name"`
+	Token string `json:"token"`
+}
